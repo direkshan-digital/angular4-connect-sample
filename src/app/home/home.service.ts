@@ -1,13 +1,13 @@
-﻿/* 
-*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. 
-*  See LICENSE in the source repository root for complete license information. 
+﻿/*
+*  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+*  See LICENSE in the source repository root for complete license information.
 */
 
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/fromPromise';
-import * as MicrosoftGraph from "@microsoft/microsoft-graph-types"
-import * as MicrosoftGraphClient from "@microsoft/microsoft-graph-client"
+import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
+import * as MicrosoftGraphClient from '@microsoft/microsoft-graph-client';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
@@ -25,36 +25,32 @@ export class HomeService {
     private httpService: HttpService) {
   }
 
-  getClient(): MicrosoftGraphClient.Client
-  {
-    var client = MicrosoftGraphClient.Client.init({
+  getClient(): MicrosoftGraphClient.Client {
+    const client = MicrosoftGraphClient.Client.init({
       authProvider: (done) => {
-          done(null, this.httpService.getAccessToken()); //first parameter takes an error if you can't get an access token
+        done(null, this.httpService.getAccessToken()); // first parameter takes an error if you can't get an access token
       }
     });
     return client;
   }
 
-  getMe(): Observable<MicrosoftGraph.User>
-  {
-    var client = this.getClient();
+  getMe(): Observable<MicrosoftGraph.User> {
+    const client = this.getClient();
     return Observable.fromPromise(client
-    .api('me')
-    .select("displayName, mail, userPrincipalName")
-    .get()
-    .then ((res => {
-      return res;
-    } ) )
+      .api('me')
+      .select('displayName, mail, userPrincipalName')
+      .get()
+      .then((res => {
+        return res;
+      }))
     );
   }
 
   sendMail(mail: MicrosoftGraph.Message) {
-    var client = this.getClient();
+    const client = this.getClient();
     return Observable.fromPromise(client
-    .api('me/sendmail')
-    .post({message: mail})
-  );
-  } 
-
-
+      .api('me/sendmail')
+      .post({ message: mail })
+    );
+  }
 }
